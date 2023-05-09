@@ -1,0 +1,3 @@
+[submodule "ping360_sonar"]
+	path = ping360_sonar
+	url = https://github.com/viniciusvidal2/ping360_sonar.git
