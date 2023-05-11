@@ -125,7 +125,7 @@
             <pose>0 0 0 0 -0 0</pose>
         </inertial>
 
-        <pose>0 0 0.030 0 -0 0</pose>
+        <pose>0 0 0.027 0 -0 0</pose>
         <gravity>1</gravity>
         <self_collide>0</self_collide>
         <kinematic>0</kinematic>
@@ -232,7 +232,7 @@
             <pose>0 0 0 0 -0 0</pose>
         </inertial>
 
-        <pose>0 0 0.030 0 -0 0</pose>
+        <pose>0 0 0.027 0 -0 0</pose>
         <gravity>1</gravity>
         <self_collide>0</self_collide>
         <kinematic>0</kinematic>
@@ -265,16 +265,16 @@
         </visual>
 
         <sensor type="ray" name="sonar_sensor">
-            <pose>0 0 -0.007 1.5707 0 0</pose>
+            <pose>0.077 0 0.0 1.5707 0 0</pose>
             <visualize>true</visualize>
             <update_rate>40</update_rate>
             <ray>
                 <scan>
                     <horizontal>
-                        <samples>1</samples>
+                        <samples>25</samples>
                         <resolution>1</resolution>
-                        <min_angle>0</min_angle>
-                        <max_angle>0</max_angle>
+                        <min_angle>-0.2181597</min_angle>
+                        <max_angle>0.2181597</max_angle>
                     </horizontal>
                 </scan>
                 <range>
@@ -308,7 +308,7 @@
             <pose>0 0 0 0 -0 0</pose>
         </inertial>
 
-        <pose>0 0 0.060 0 -0 0</pose>
+        <pose>0 0 0.057 0 -0 0</pose>
         <gravity>1</gravity>
         <self_collide>0</self_collide>
         <kinematic>0</kinematic>

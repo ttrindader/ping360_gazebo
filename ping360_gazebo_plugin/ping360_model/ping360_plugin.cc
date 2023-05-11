@@ -77,9 +77,16 @@ namespace gazebo
       auto rangeSensor = std::dynamic_pointer_cast<sensors::RaySensor>(this->sensor);
 
       // Get the latest range measurements from the sensor
-      double range = rangeSensor->Range(0);
+      std::vector<double> ranges;
+      rangeSensor->Ranges(ranges);
+      // Convert to float type for filling in the message
+      std::vector<float> ranges_float(ranges.size());
+      for (size_t i = 0; i < ranges.size(); i++)
+        ranges_float[i] = std::isinf(ranges[i]) ? 30 : static_cast<float>(ranges[i]);
+      double range = 100 * *std::min_element(ranges_float.begin(), ranges_float.end()); // [cm]
+
       // Get the joint angle in degrees
-      double angle = this->joint->Position(0) * 180/M_PI;
+      float angle = this->joint->Position(0) * 180/M_PI;
       int angle_ranged = angle - static_cast<int>(angle/360)*360;
 
       // // Print the range to the console
@@ -93,20 +100,22 @@ namespace gazebo
         ping360_sonar::SonarEcho msg;
         msg.header.frame_id = "sonar_frame";
         msg.header.stamp = ros::Time::now();
-        msg.number_of_samples = 1000;
+        msg.number_of_samples = ranges_float.size();
         msg.speed_of_sound = 1550;
         msg.transmit_frequency = 1000;
         msg.angle = static_cast<float>(angle_ranged);
-        msg.range = range;
+        msg.range = range < 256 ? range : 256; // This variable is horrible, uint8_t, makes no sense
+        msg.intensities.resize(ranges_float.size(), 0);
         this->sonarMsgPub.publish(msg);
+        
         sensor_msgs::LaserScan msg_info;
         msg_info.header = msg.header;
         msg_info.angle_max = 2*M_PI;
         msg_info.angle_increment = M_PI/10;
         msg_info.range_min = 0.75;
         msg_info.range_max = 30;
-        msg_info.ranges = std::vector<float>{range};
-        msg_info.intensities = std::vector<float>{0};
+        msg_info.ranges = ranges_float;
+        msg_info.intensities.resize(ranges_float.size(), 0);
         this->sonarMsgInfoPub.publish(msg_info);
       }
     }
